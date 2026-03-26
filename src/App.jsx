@@ -6,7 +6,7 @@ function App() {
       <Routes>
         <Route path="/" element={
           <div>
-            <h1>Hello World</h1>
+            <h1>Hello World 2</h1>
             <Link to="/problem"><button>Go to Problem</button></Link>
           </div>
         } />

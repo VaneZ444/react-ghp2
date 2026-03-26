@@ -2,35 +2,22 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import './App.css'
-
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>hello cloud computing</h1>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <div className="ticks"></div>
-    </>
-  )
+    <BrowserRouter basename="/react-ghp2"> {/*repo name*/}
+      <Routes>
+        <Route path="/" element={
+          <div>
+            <h1>Hello World</h1>
+            <Link to="/problem"><button>Go to Problem</button></Link>
+          </div>
+        } />
+        <Route path="/problem" element={<h1>Hello World (problematic)</h1>} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App

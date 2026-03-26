@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [22.x]
 
     steps:
     - name: Checkout repository
@@ -35,14 +35,12 @@ jobs:
       run: npm run build
 
     - name: Deploy
-      if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+      if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+      env:
+        GITHUB_TOKEN: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git remote set-url origin https://${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}@://github.com{{ github.repository }}.git
+        # Using a cleaner way to inject the token for the gh-pages package
+        git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@://github.com{{ github.repository }}.git"
         npm run deploy
-      env:
-        user_name: 'github-actions[bot]'
-        user_email: 'github-actions[bot]@://github.com'
-        github_token: ${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}
-        repository: ${{ github.repository }}

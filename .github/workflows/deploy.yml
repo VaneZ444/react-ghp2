@@ -11,37 +11,30 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [22.x]
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-      with:
-        persist-credentials: false
 
-    - name: Set up Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
+    - name: Build Docker Image
+      run: docker build -t react-app .
 
-    - name: Install dependencies
-      run: npm ci
+    - name: Lint in Docker
+      run: docker run --rm react-app npm run lint
 
-    - name: Lint
-      run: npm run lint
-
-    - name: Build
-      run: npm run build
+    - name: Extract Build
+      run: |
+        docker create --name extract react-app
+        docker cp extract:/app/dist ./dist
+        docker rm extract
 
     - name: Deploy
       run: |
         git config --global user.name $user_name
         git config --global user.email $user_email
         git remote set-url origin https://${github_token}@github.com/${repository}
-        npm run deploy
+        # Note: Ensure your 'npm run deploy' points to the './dist' folder
+        npm install -g gh-pages
+        gh-pages -d dist
       env:
         user_name: 'github-actions[bot]'
         user_email: 'github-actions[bot]@users.noreply.github.com'

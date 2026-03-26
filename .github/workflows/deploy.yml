@@ -37,8 +37,8 @@ jobs:
     - name: Deploy
       if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
       run: |
-        git config --global user.name $user_name
-        git config --global user.email $user_email
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         git remote set-url origin https://${{ secrets.ACTIONS_DEPLOY_ACCESS_TOKEN }}@://github.com{{ github.repository }}.git
         npm run deploy
       env:

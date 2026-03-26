@@ -41,6 +41,5 @@ jobs:
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        # Using a cleaner way to inject the token for the gh-pages package
-        git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@://github.com{{ github.repository }}.git"
+        git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@://github.com{GITHUB_REPOSITORY}.git"
         npm run deploy
